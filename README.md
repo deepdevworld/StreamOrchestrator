@@ -15,14 +15,16 @@ Tail the logs
   docker logs --tail 200 -f stream_orchestrator
   ```
 
-Run the client by opening the terminal
-*To test the ProviderC you need to run the command in two terminals*
+Run the client by opening the terminal.  
+    **To test the ProviderC you need to run the command in two terminals.**  
+    **If latency exception is not triggering then please run this command few time as random delay is generated.**
 * ```
   curl -N http://127.0.0.1:8000/stream
   ```
 
 **To test what happens when provider is not available set `REGISTER_PROVIDER_FLAG=0` to disable the registration of the providers
 and follow above steps again.**
+
 
 ## Providers
 Providers simulate different inference services with varying performance characteristics such as latency, stability, and failure behavior.
