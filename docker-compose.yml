@@ -1,0 +1,6 @@
+services:
+  stream_orchestration:
+    build: .
+    container_name: stream_orchestration
+    ports:
+      - "8000:8000"
