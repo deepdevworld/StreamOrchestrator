@@ -8,7 +8,7 @@ A resilient streaming endpoint that dynamically switches between different provi
 Build server 
 * open terminal inside the project directory.
 * Run the following commands.
-* Make sure port 8000 as the server is exposed to that port or else change it in the docker compose file.
+* Make sure port 8000 as the server is exposed to that port or else change it in the docker compose file as well as in curl command below.
 * ```
   docker compose up --build -d
   ```
