@@ -12,7 +12,7 @@ build server
 
 Tail the logs
 * ```
-  docker logs --tail 200 -f stream_orchestrator
+  docker logs --tail 200 -f stream_orchestration
   ```
 
 Run the client by opening the terminal.  
