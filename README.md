@@ -3,21 +3,23 @@ A resilient streaming endpoint that dynamically switches between different provi
 
 
 # RUN 
-## steps
+## Steps
 
-build server 
+Build server 
+* open terminal inside the project directory.
+* Run the following commands.
+* Make sure port 8000 as the server is exposed to that port or else change it in the docker compose file.
 * ```
   docker compose up --build -d
   ```
-
 Tail the logs
 * ```
   docker logs --tail 200 -f stream_orchestration
   ```
 
 Run the client by opening the terminal.  
-    **To test the ProviderC you need to run the command in two terminals.**  
-    **If latency exception is not triggering then please run this command few time as random delay is generated.**
+* To test the ProviderC for clint limit test you need to run the command in two terminals simultaneously.  
+* If latency exception is not triggering then please run this command few time as random delay is generated.
 * ```
   curl -N http://127.0.0.1:8000/stream
   ```
