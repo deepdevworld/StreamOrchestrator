@@ -1,11 +1,13 @@
 import logging
 import asyncio
+import random
 
 from typing import AsyncGenerator
-from config import TEXT, DEFAULT_STREAMING_SPEED, PROVIDER_C_MAX_CLIENT
+from health_metric.health_metric import HealthMetric
+from config import TEXT, DEFAULT_STREAMING_SPEED, MAX_STREAMING_DELAY
+from exception_handlers.exception_handler import ProviderUnavailableError
 
 from .base_provider import BaseProvider
-from exception_handlers.exception_handler import TooManyActiveClientsError
 
 
 
@@ -16,22 +18,24 @@ logger = logging.getLogger(__name__)
 class ProviderC(BaseProvider):
 
     """
-    Simulates an inference provider that enforces a maximum active client limit and
-    rejects new streaming requests when the limit is exceeded.
+    Simulates streaming provider with random failures.
+
     """
 
-    active_client_count = 0
+    health_metric: HealthMetric = HealthMetric()
 
     async def stream(self) -> AsyncGenerator[str, None]:
         try:
-            ProviderC.active_client_count += 1
-            logger.info(f"Streaming From  {self.__class__.__name__}, {self.__class__.active_client_count} active clients")
-
+            await self.health_metric.add_active_clients()
+            logger.info(f"Streaming From {self.__class__.__name__}")
             for chunk in TEXT.split():
-                if ProviderC.active_client_count > PROVIDER_C_MAX_CLIENT:
-                    raise TooManyActiveClientsError(count=ProviderC.active_client_count, message=ProviderC.__name__)
-                else:
-                    await asyncio.sleep(DEFAULT_STREAMING_SPEED)
+                # random delay for latency
+                await asyncio.sleep(DEFAULT_STREAMING_SPEED)
+                if random.random() > 0.9:
+                    await asyncio.sleep(random.uniform(DEFAULT_STREAMING_SPEED, MAX_STREAMING_DELAY))
+                # random failure of the provider
+                if random.random() > 0.9:
+                    raise ProviderUnavailableError(self.__class__.__name__)
                 yield chunk
         finally:
-            ProviderC.active_client_count -= 1
+            await self.health_metric.remove_active_clients()
